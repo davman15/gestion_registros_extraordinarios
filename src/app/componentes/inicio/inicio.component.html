@@ -1,0 +1,95 @@
+<app-barra-navegacion></app-barra-navegacion>
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="calendario text-center">
+                <full-calendar #calendario [options]="calendarOptions" [events]="eventos" [timeFormat]="'h:mm'">
+                </full-calendar>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-xl" id="modalCalendario1" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+    aria-labelledby="modalCalendario1">
+    <div class="modal-dialog">
+        <form [formGroup]="formGroup1" #formulario="ngForm" (ngSubmit)="registrarEvento()">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-6">
+                                <h4>Item</h4>
+                                <select required class="form-select mb-2" formControlName="item" aria-label="item">
+                                    <option selected value="">-- Seleccione Item --</option>
+                                    <option *ngFor="let opcion of arrayItems | keyvalue" [value]="opcion.key">
+                                        {{opcion.value}}
+                                    </option>
+                                </select>
+                                <span class="help-block text-danger" *ngIf="f['item'].touched && f['item'].invalid">
+                                    <span *ngIf="f['item'].errors && f['item'].errors['required']">Seleccione una opción
+                                    </span>
+                                </span>
+                                <h4>Concepto</h4>
+                                <input type="text" formControlName="concepto" class="form-control mb-3">
+                                <h4>Trayecto</h4>
+                                <input type="text" formControlName="trayecto" class="form-control mb-3">
+                                <h4 class="mt-2">Fecha de inicio</h4>
+                                <input type="date" formControlName="fechaInicio" id="fechaInicio"
+                                    class="form-control mb-2">
+                                <input type="datetime-local" id="fechaInicioT" class="oculto mb-2 form-control">
+                                <div class="form-check form-switch mb-3 ">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="checkInicio">
+                                    <label class="form-check-label" for="checkInicio">Seleccionar hora </label>
+                                </div>
+                                <span class="help-block text-danger"
+                                    *ngIf="f['fechaInicio'].touched && f['fechaInicio'].invalid">
+                                    <span
+                                        *ngIf="f['fechaInicio'].errors && f['fechaInicio'].errors['required']">Seleccione
+                                        una fecha
+                                    </span>
+                                </span>
+                                <h4 class="mt-2">Fecha de fin</h4>
+                                <input type="date" id="fechaFin" formControlName="fechaFin" class="form-control mb-2 ">
+                                <input type="datetime-local" id="fechaFinT" class="oculto form-control mb-2">
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="checkFin">
+                                    <label class="form-check-label" for="checkFin">Seleccionar hora </label>
+                                </div>
+                                <span class="help-block text-danger"
+                                    *ngIf="f['fechaFin'].touched && f['fechaFin'].invalid">
+                                    <span *ngIf="f['fechaFin'].errors && f['fechaFin'].errors['required']">Seleccione
+                                        una fecha final
+                                    </span>
+                                </span>
+                                <h4 class="my-2">Color</h4>
+                                <input type="color" id="colorEvento" formControlName="colorEvento" class="form-control my-2">
+                            </div>
+                            <div class="col-5 offset-1">
+                                <h4>Gastos Varios</h4>
+                                <input type="text" formControlName="gastos" class="form-control mb-4">
+                                <h4>Transporte Bus-Metro</h4>
+                                <input type="text" formControlName="transporte" class="form-control mb-4">
+                                <h4>Dietas</h4>
+                                <input type="text" formControlName="dietas" class="form-control mb-4">
+                                <h4>Viajes Avion/Tren</h4>
+                                <input type="text" formControlName="viajes" class="form-control mb-4">
+                                <h4>Alojamiento Hotel</h4>
+                                <input type="text" formControlName="alojamiento" class="form-control mb-4">
+                                <h4>Kilometros</h4>
+                                <input type="text" formControlName="km" class="form-control mb-4">
+                                <h4>Total</h4>
+                                <input type="text" formControlName="total" readonly class="form-control mb-2">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger col-3" (click)="cerrarModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-success col-3">Registrar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+:host {
+  --fc-button-bg-color: #007bff;
+  --fc-button-border-color: #0062cc;
+  --fc-button-hover-bg-color: #0b5ed7;
+  --fc-button-hover-border-color: #0a58ca;
+  --fc-button-active-bg-color: #0b5ed7;
+  --fc-button-active-border-color: #0a58ca;
+  --fc-more-link-bg-color: #007bff;
+  --fc-border-color: rgb(180, 164, 164);
+}
+
+.oculto {
+  display: none;
+}
