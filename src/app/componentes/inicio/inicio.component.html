@@ -37,11 +37,6 @@
                                 <h4 class="mt-2">Fecha de inicio</h4>
                                 <input type="date" formControlName="fechaInicio" id="fechaInicio"
                                     class="form-control mb-2">
-                                <input type="datetime-local" id="fechaInicioT" class="oculto mb-2 form-control">
-                                <div class="form-check form-switch mb-3 ">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="checkInicio">
-                                    <label class="form-check-label" for="checkInicio">Seleccionar hora </label>
-                                </div>
                                 <span class="help-block text-danger"
                                     *ngIf="f['fechaInicio'].touched && f['fechaInicio'].invalid">
                                     <span
@@ -49,37 +44,89 @@
                                         una fecha
                                     </span>
                                 </span>
+                                <input type="time" class="mb-2 form-control" formControlName="fechaInicioHora">
+                                <span class="help-block text-danger"
+                                    *ngIf="f['fechaInicioHora'].touched && f['fechaInicioHora'].invalid">
+                                    <span
+                                        *ngIf="f['fechaInicioHora'].errors && f['fechaInicioHora'].errors['required']">Seleccione
+                                        una hora
+                                    </span>
+                                </span>
                                 <h4 class="mt-2">Fecha de fin</h4>
                                 <input type="date" id="fechaFin" formControlName="fechaFin" class="form-control mb-2 ">
-                                <input type="datetime-local" id="fechaFinT" class="oculto form-control mb-2">
-                                <div class="form-check form-switch mb-3">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="checkFin">
-                                    <label class="form-check-label" for="checkFin">Seleccionar hora </label>
-                                </div>
                                 <span class="help-block text-danger"
                                     *ngIf="f['fechaFin'].touched && f['fechaFin'].invalid">
                                     <span *ngIf="f['fechaFin'].errors && f['fechaFin'].errors['required']">Seleccione
                                         una fecha final
                                     </span>
                                 </span>
+                                <input type="time" class="mb-2 form-control" formControlName="fechaFinHora">
+                                <span class="help-block text-danger"
+                                    *ngIf="f['fechaFinHora'].touched && f['fechaFinHora'].invalid">
+                                    <span
+                                        *ngIf="f['fechaFinHora'].errors && f['fechaFinHora'].errors['required']">Seleccione
+                                        una hora
+                                    </span>
+                                </span>
+                                <div class="text-danger" *ngIf="formulario.errors?.['fechasInvalidas']">La fecha y hora de fin deben ser posteriores a la fecha y hora de inicio.</div>
                                 <h4 class="my-2">Color</h4>
-                                <input type="color" id="colorEvento" formControlName="colorEvento" class="form-control my-2">
+                                <input type="color" id="colorEvento" formControlName="colorEvento"
+                                    class="form-control my-2">
                             </div>
                             <div class="col-5 offset-1">
                                 <h4>Gastos Varios</h4>
-                                <input type="text" formControlName="gastos" class="form-control mb-4">
+                                <input type="text" pattern="^\d*([.,]\d+)?$" formControlName="gastos" class="form-control"
+                                    [ngClass]="{'mb-2': f['gastos'].touched && f['gastos'].invalid, 'mb-4':!f['gastos'].invalid}">
+                                <span class="help-block text-danger" *ngIf="f['gastos'].touched && f['gastos'].invalid">
+                                    <span *ngIf="f['gastos'].errors && f['gastos'].errors['pattern']">Introduzca
+                                        valores numéricos correctos
+                                    </span>
+                                </span>
                                 <h4>Transporte Bus-Metro</h4>
-                                <input type="text" formControlName="transporte" class="form-control mb-4">
+                                <input type="text" pattern="^\d*([.,]\d+)?$" formControlName="transporte" class="form-control"
+                                    [ngClass]="{'mb-2':f['transporte'].touched && f['transporte'].invalid, 'mb-4':!f['transporte'].invalid}">
+                                <span class="help-block text-danger"
+                                    *ngIf="f['transporte'].touched && f['transporte'].invalid">
+                                    <span *ngIf="f['transporte'].errors && f['transporte'].errors['pattern']">Introduzca
+                                        valores numéricos correctos
+                                    </span>
+                                </span>
                                 <h4>Dietas</h4>
-                                <input type="text" formControlName="dietas" class="form-control mb-4">
+                                <input type="text" pattern="^[0-9]*$" formControlName="dietas" class="form-control"
+                                    [ngClass]="{'mb-2':f['dietas'].touched && f['dietas'].invalid, 'mb-4':!f['dietas'].invalid}">
+                                <span class="help-block text-danger" *ngIf="f['dietas'].touched && f['dietas'].invalid">
+                                    <span *ngIf="f['dietas'].errors && f['dietas'].errors['pattern']">Introduzca
+                                        valores numéricos correctos
+                                    </span>
+                                </span>
                                 <h4>Viajes Avion/Tren</h4>
-                                <input type="text" formControlName="viajes" class="form-control mb-4">
+                                <input type="text" pattern="^\d*([.,]\d+)?$" formControlName="viajes" class="form-control"
+                                    [ngClass]="{'mb-2':f['viajes'].touched && f['viajes'].invalid, 'mb-4':!f['viajes'].invalid}">
+                                <span class="help-block text-danger" *ngIf="f['viajes'].touched && f['viajes'].invalid">
+                                    <span *ngIf="f['viajes'].errors && f['viajes'].errors['pattern']">Introduzca
+                                        valores numéricos correctos
+                                    </span>
+                                </span>
                                 <h4>Alojamiento Hotel</h4>
-                                <input type="text" formControlName="alojamiento" class="form-control mb-4">
+                                <input type="text" pattern="^\d+(?:[,.]\d{2})?$" formControlName="alojamiento" class="form-control"
+                                    [ngClass]="{'mb-2':f['alojamiento'].touched && f['alojamiento'].invalid, 'mb-4':!f['alojamiento'].invalid}">
+                                <span class="help-block text-danger"
+                                    *ngIf="f['alojamiento'].touched && f['alojamiento'].invalid">
+                                    <span
+                                        *ngIf="f['alojamiento'].errors && f['alojamiento'].errors['pattern']">Introduzca
+                                        valores numéricos correctos
+                                    </span>
+                                </span>
                                 <h4>Kilometros</h4>
-                                <input type="text" formControlName="km" class="form-control mb-4">
+                                <input type="number" pattern="^[0-9]*$" formControlName="km" class="form-control"
+                                    [ngClass]="{'mb-2':f['km'].touched && f['km'].invalid, 'mb-4':!f['km'].invalid}">
+                                <span class="help-block text-danger" *ngIf="f['km'].touched && f['km'].invalid">
+                                    <span *ngIf="f['km'].errors && f['km'].errors['pattern']">Introduzca
+                                        valores numéricos correctos
+                                    </span>
+                                </span>
                                 <h4>Total</h4>
-                                <input type="text" formControlName="total" readonly class="form-control mb-2">
+                                <input type="text" formControlName="total" readonly class="form-control mb-2"> 
                             </div>
                         </div>
                     </div>
