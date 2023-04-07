@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { CalendarOptions, EventInput } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction'
@@ -12,6 +12,7 @@ import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
 import { IEvento } from 'src/app/models/IEvento';
 import * as moment from 'moment';
 import 'moment-timezone';
+import Swal from 'sweetalert2';
 declare var $: any;
 
 @Component({
@@ -24,11 +25,11 @@ export class InicioComponent {
   constructor(private db: AngularFirestore, private formBuilder1: FormBuilder) { }
 
   formGroup1!: FormGroup;
-  campos = ['gastos', 'transporte', 'dietas', 'viajes', 'alojamiento'];
+  campos = ['gastos', 'transporte', 'dietas', 'viajes', 'alojamiento', 'km'];
   modoEdicion: boolean = false;
   @ViewChild('calendario') calendario!: FullCalendarComponent;
   @ViewChild('formulario') form!: NgForm;
-
+  idEvento!: string;
   idUsuario!: any;
   eventos: EventInput[] = [];
   coleccionEventos!: AngularFirestoreCollection<any>;
@@ -96,25 +97,29 @@ export class InicioComponent {
     this.cargarItems();
     this.formularios();
     this.captarActualizaciones();
+    this.idEvento = this.formGroup1.get('id')!.value;
   }
 
   ngAfterViewInit(): void {
     this.calendario.getApi().on('dateClick', (info) => {
+      this.modoEdicion = false;
       $('#modalCalendario1').modal('show');
       this.formGroup1.get('fechaInicio')!.setValue(info.dateStr);
       this.formGroup1.get('fechaFin')!.setValue(info.dateStr);
     });
 
     this.calendario.getApi().on('eventClick', (info) => {
-      const sub = this.coleccionEventos.doc(info.event.id).valueChanges().subscribe(data => {
+      let id = info.event.id;
+      const sub = this.coleccionEventos.doc(id).valueChanges().subscribe(data => {
+        this.modoEdicion = true;
         $('#modalCalendario1').modal('show');
-        this.rellenarDatosFormulario(data);
+        this.rellenarDatosFormulario(data, id);
         sub.unsubscribe();
       });
     });
   }
 
-  rellenarDatosFormulario(evento: any) {
+  rellenarDatosFormulario(evento: any, id: string) {
     for (let propiedad in evento) {
       if (propiedad == 'fechaInicio' || propiedad == 'fechaFin') {
         let fecha = moment(evento[propiedad]).format('YYYY-MM-DD');
@@ -134,6 +139,7 @@ export class InicioComponent {
 
   formularios() {
     this.formGroup1 = this.formBuilder1.group({
+      id: [''],
       item: ['', Validators.required],
       fechaInicio: ['', Validators.required],
       fechaInicioHora: ['', Validators.required],
@@ -166,7 +172,10 @@ export class InicioComponent {
     return null;
   }
 
-  cerrarModal() {
+  cerrarModal(modoEdicion: boolean, idEvento: string) {
+    if (modoEdicion && idEvento != "")
+      this.borrarEvento(idEvento);
+
     $('#modalCalendario1').modal('hide');
     if (this.form) {
       this.form.reset();
@@ -178,30 +187,35 @@ export class InicioComponent {
   }
 
   aniadirEvento(evento: IEvento) {
-    this.coleccionEventos.add(evento)
-      .then(docRef => {
-        this.coleccionEventos.doc(docRef.id).update({ id: docRef.id });
-      });
-    this.cerrarModal();
+    this.coleccionEventos.doc(evento.id).set(evento);
+    this.cerrarModal(this.modoEdicion, "");
   }
 
-  borrarEvento(clickInfo: any) {
-    if (confirm('¿Estás seguro de que quieres eliminar este evento?')) {
-      clickInfo.event.remove();
-      this.db.collection("eventos").doc(clickInfo.event.id).delete();
-    }
+  borrarEvento(id: string) {
+    Swal.fire({
+      title: '¿Estás seguro de que quieres eliminar este evento?',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.value)
+        this.coleccionEventos.doc(id).delete();
+    });
   }
 
-  registrarEvento() {
+  registrarEvento(modoEdicion: boolean) {
     let evento: IEvento = Object.assign({}, this.formGroup1.value);
     evento.fechaInicio = this.administrarFecha(evento.fechaInicio, evento.fechaInicioHora);
     evento.fechaFin = this.administrarFecha(evento.fechaFin, evento.fechaFinHora);
+
     //Primero aqui en el cliente aplicar validaciones
     if (this.formGroup1.invalid) {
       this.formGroup1.markAllAsTouched();
       return;
     }
-
+    if (!modoEdicion) {
+      evento.id = this.db.createId().toString();
+    }
     this.aniadirEvento(evento);
   }
 
@@ -260,7 +274,14 @@ export class InicioComponent {
     for (let i = 0; i < this.campos.length; i++) {
       const valorCampo = this.formGroup1.get(this.campos[i])!.value || 0;
       const fieldValueNum = parseFloat(valorCampo.toString().replace(',', '.'));
-      total += fieldValueNum;
+      if (this.campos[i] == 'dietas')
+        total += parseInt(valorCampo) * 26.76;
+      else if (this.campos[i] == 'km') {
+        console.log("aqui");
+        total += parseFloat(valorCampo) * 0.19;
+      }
+      else
+        total += fieldValueNum;
     }
     this.formGroup1.get('total')!.setValue(Number(total).toFixed(2) + "€");
   }

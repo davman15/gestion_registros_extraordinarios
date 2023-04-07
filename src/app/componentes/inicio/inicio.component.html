@@ -13,7 +13,7 @@
 <div class="modal fade modal-xl" id="modalCalendario1" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
     aria-labelledby="modalCalendario1">
     <div class="modal-dialog">
-        <form [formGroup]="formGroup1" #formulario="ngForm" (ngSubmit)="registrarEvento()">
+        <form [formGroup]="formGroup1" #formulario="ngForm" (ngSubmit)="registrarEvento(modoEdicion)">
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="container-fluid">
@@ -68,14 +68,16 @@
                                         una hora
                                     </span>
                                 </span>
-                                <div class="text-danger" *ngIf="formulario.errors?.['fechasInvalidas']">La fecha y hora de fin deben ser posteriores a la fecha y hora de inicio.</div>
+                                <div class="text-danger" *ngIf="formulario.errors?.['fechasInvalidas']">La fecha y hora
+                                    de fin deben ser posteriores a la fecha y hora de inicio.</div>
                                 <h4 class="my-2">Color</h4>
                                 <input type="color" id="colorEvento" formControlName="colorEvento"
                                     class="form-control my-2">
                             </div>
                             <div class="col-5 offset-1">
                                 <h4>Gastos Varios</h4>
-                                <input type="text" pattern="^\d*([.,]\d+)?$" formControlName="gastos" class="form-control"
+                                <input type="text" pattern="^\d*([.,]\d+)?$" formControlName="gastos"
+                                    class="form-control"
                                     [ngClass]="{'mb-2': f['gastos'].touched && f['gastos'].invalid, 'mb-4':!f['gastos'].invalid}">
                                 <span class="help-block text-danger" *ngIf="f['gastos'].touched && f['gastos'].invalid">
                                     <span *ngIf="f['gastos'].errors && f['gastos'].errors['pattern']">Introduzca
@@ -83,7 +85,8 @@
                                     </span>
                                 </span>
                                 <h4>Transporte Bus-Metro</h4>
-                                <input type="text" pattern="^\d*([.,]\d+)?$" formControlName="transporte" class="form-control"
+                                <input type="text" pattern="^\d*([.,]\d+)?$" formControlName="transporte"
+                                    class="form-control"
                                     [ngClass]="{'mb-2':f['transporte'].touched && f['transporte'].invalid, 'mb-4':!f['transporte'].invalid}">
                                 <span class="help-block text-danger"
                                     *ngIf="f['transporte'].touched && f['transporte'].invalid">
@@ -100,7 +103,8 @@
                                     </span>
                                 </span>
                                 <h4>Viajes Avion/Tren</h4>
-                                <input type="text" pattern="^\d*([.,]\d+)?$" formControlName="viajes" class="form-control"
+                                <input type="text" pattern="^\d*([.,]\d+)?$" formControlName="viajes"
+                                    class="form-control"
                                     [ngClass]="{'mb-2':f['viajes'].touched && f['viajes'].invalid, 'mb-4':!f['viajes'].invalid}">
                                 <span class="help-block text-danger" *ngIf="f['viajes'].touched && f['viajes'].invalid">
                                     <span *ngIf="f['viajes'].errors && f['viajes'].errors['pattern']">Introduzca
@@ -108,7 +112,8 @@
                                     </span>
                                 </span>
                                 <h4>Alojamiento Hotel</h4>
-                                <input type="text" pattern="^\d+(?:[,.]\d{2})?$" formControlName="alojamiento" class="form-control"
+                                <input type="text" pattern="^\d+(?:[,.]\d{2})?$" formControlName="alojamiento"
+                                    class="form-control"
                                     [ngClass]="{'mb-2':f['alojamiento'].touched && f['alojamiento'].invalid, 'mb-4':!f['alojamiento'].invalid}">
                                 <span class="help-block text-danger"
                                     *ngIf="f['alojamiento'].touched && f['alojamiento'].invalid">
@@ -126,15 +131,21 @@
                                     </span>
                                 </span>
                                 <h4>Total</h4>
-                                <input type="text" formControlName="total" readonly class="form-control mb-2"> 
+                                <input type="text" formControlName="total" readonly class="form-control mb-2">
+                                <input type="hidden" formControlName="id" [(ngModel)]="idEvento">
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger col-3" (click)="cerrarModal()">Cancelar</button>
-                    <button type="submit" class="btn btn-success col-3">Registrar</button>
+                    <button type="button" class="btn btn-danger col-3" [ngClass]="{'oculto':!modoEdicion}"
+                        (click)="cerrarModal(false,'')">Cancelar</button>
+                    <button type="button" class="btn col-3"
+                        [ngClass]="{'btn-danger':!modoEdicion,'btn-primary':modoEdicion}"
+                        (click)="cerrarModal(modoEdicion,idEvento)">
+                        {{ modoEdicion ? 'Borrar Evento':'Cancelar' }}</button>
+                    <button type="submit" class="btn btn-success col-3">
+                        {{ modoEdicion ? 'Actualizar':'Registrar'}}</button>
                 </div>
             </div>
         </form>
