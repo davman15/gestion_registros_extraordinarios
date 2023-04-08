@@ -85,6 +85,12 @@ export class AuthService {
     });
   }
 
+  cerrarSesion() {
+    this.auth.signOut().then(() => {
+      this.router.navigate(['/login']);
+    })
+  }
+
   private validacionesEspañol(error: any) {
     switch (error.code) {
       case 'auth/invalid-email':

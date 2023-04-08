@@ -5,15 +5,25 @@ import { RegistroComponent } from './componentes/registro/registro.component';
 import { InicioComponent } from './componentes/inicio/inicio.component';
 import { RecuperarContrasenaComponent } from './componentes/recuperar-contrasena/recuperar-contrasena.component';
 import { InformacionComponent } from './componentes/informacion/informacion.component';
+import { BautismosComponent } from './componentes/bautismos/bautismos.component';
+import { map } from 'rxjs/operators';
+import { AngularFireAuthGuard, redirectUnauthorizedTo } from '@angular/fire/compat/auth-guard';
+import { ErrorComponent } from './componentes/error/error.component';
+
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo('error');
+const uidAdmin = '';
+const soloAdmin = () => map((usuario: any) => !!usuario && usuario.uid === uidAdmin);
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: RegistroComponent },
-  { path: 'inicio', component: InicioComponent },
+  { path: 'inicio', component: InicioComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
   { path: 'recuperar-contrasena', component: RecuperarContrasenaComponent },
-  { path: 'informacion', component: InformacionComponent }
-
+  { path: 'informacion', component: InformacionComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
+  { path: 'bautismos', component: BautismosComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
+  { path: 'error', component: ErrorComponent },
+  { path: '*', redirectTo: 'error', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];
 
 @NgModule({

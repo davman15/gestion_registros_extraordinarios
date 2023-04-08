@@ -9,8 +9,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./recuperar-contrasena.component.css']
 })
 export class RecuperarContrasenaComponent {
-  constructor(private fb: FormBuilder, private servicio: AuthService, private spinner: NgxSpinnerService) {
-  }
+  constructor(private fb: FormBuilder, private servicio: AuthService, private spinner: NgxSpinnerService) {}
 
   formGroup!: FormGroup;
 

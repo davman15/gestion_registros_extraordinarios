@@ -1,0 +1,46 @@
+<app-barra-navegacion></app-barra-navegacion>
+<h2 class="text-center my-4">Bautismos</h2>
+<div class="calendar-container my-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                 <full-calendar [options]="calendarOptions"></full-calendar>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <table datatable [dtOptions]='tablaOpciones' #tabla class="table">
+            <thead class="bg-primary text-white">
+              <tr>
+                <th>ID</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Foo</td>
+                <td>Bar</td>
+                <td><button class="btn btn-primary">Editar</button></td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Someone</td>
+                <td>Youknow</td>
+                <td><button class="btn btn-primary">Editar</button></td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Iamout</td>
+                <td>Ofinspiration</td>
+                <td><button class="btn btn-primary">Editar</button></td>
+              </tr>
+            </tbody>
+          </table>
+          
+    </div>
+</div>

@@ -17,6 +17,10 @@ import { RecuperarContrasenaComponent } from './componentes/recuperar-contrasena
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { BarraNavegacionComponent } from './componentes/barra-navegacion/barra-navegacion.component';
 import { InformacionComponent } from './componentes/informacion/informacion.component';
+import { BautismosComponent } from './componentes/bautismos/bautismos.component';
+import { DataTablesModule } from "angular-datatables";
+import { TotalResultadosComponent } from './componentes/total-resultados/total-resultados.component';
+import { ErrorComponent } from './componentes/error/error.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +30,10 @@ import { InformacionComponent } from './componentes/informacion/informacion.comp
     InicioComponent,
     RecuperarContrasenaComponent,
     BarraNavegacionComponent,
-    InformacionComponent
+    InformacionComponent,
+    BautismosComponent,
+    TotalResultadosComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +44,8 @@ import { InformacionComponent } from './componentes/informacion/informacion.comp
     FormsModule,
     NgxSpinnerModule,
     ReactiveFormsModule,
-    FullCalendarModule
+    FullCalendarModule,
+    DataTablesModule
   ],
   providers: [AuthService, NgxSpinnerService],
   bootstrap: [AppComponent],
