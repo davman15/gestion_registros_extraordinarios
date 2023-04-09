@@ -6,9 +6,15 @@
   --fc-button-active-bg-color: #0b5ed7;
   --fc-button-active-border-color: #0a58ca;
   --fc-more-link-bg-color: #007bff;
-  --fc-border-color: rgb(180, 164, 164);
+  --fc-border-color: rgb(180, 164, 164)
 }
 
 .oculto {
   display: none;
 }
+
+/*@media (min-width: 100px) {
+  .calendario .fc-view-container {
+    height: 800px !important; 
+  }
+}*/

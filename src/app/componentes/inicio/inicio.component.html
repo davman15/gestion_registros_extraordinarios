@@ -1,8 +1,8 @@
 <app-barra-navegacion></app-barra-navegacion>
 <div class="container my-4">
     <div class="row">
-        <div class="col-12">
-            <div class="calendario text-center">
+        <div class="col-12 ">
+            <div class="calendario text-center" >
                 <full-calendar #calendario [options]="calendarOptions" [events]="eventos" [timeFormat]="'h:mm'">
                 </full-calendar>
             </div>
@@ -138,14 +138,12 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger col-3" [ngClass]="{'oculto':!modoEdicion}"
+                    <button type="button" class="btn btn-danger col" [ngClass]="{'oculto':!modoEdicion}"
                         (click)="cerrarModal(false,'')">Cancelar</button>
-                    <button type="button" class="btn col-3"
+                    <button type="button" class="btn text-center col"
                         [ngClass]="{'btn-danger':!modoEdicion,'btn-primary':modoEdicion}"
-                        (click)="cerrarModal(modoEdicion,idEvento)">
-                        {{ modoEdicion ? 'Borrar Evento':'Cancelar' }}</button>
-                    <button type="submit" class="btn btn-success col-3">
-                        {{ modoEdicion ? 'Actualizar':'Registrar'}}</button>
+                        (click)="cerrarModal(modoEdicion,idEvento)">{{ modoEdicion ? 'Borrar':'Cancelar' }}</button>
+                    <button type="submit" class="btn btn-success col">{{ modoEdicion ? 'Actualizar':'Registrar'}}</button>
                 </div>
             </div>
         </form>

@@ -1,25 +1,51 @@
 @import "../node_modules/ngx-spinner/animations/ball-scale-multiple.css";
+
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: content-box;
+  padding: 0;
+  margin: 0;
+  box-sizing: content-box;
 }
+
 ::-webkit-scrollbar {
-    width: 10px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background-color: #f5f5f5;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    border-radius: 5px;
-    background-color: #aaa;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: #999;
-  }
-  ::-webkit-scrollbar-thumb:active {
-    background-color: #666;
-  }
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: #aaa;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #999;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: #666;
+}
+
+.fc-header-toolbar {
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.fc-header-toolbar .fc-toolbar-chunk {
+  flex-grow: 1;
+  flex-basis: 0;
+  text-align: center;
+  margin-top: 4px;
+}
+.fc-unthemed .fc-scroller {
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin-right: -17px;
+  padding-bottom: 17px;
+  height: 90vh !important;
+}
+
+.fc-unthemed .fc-axis {
+  white-space: nowrap;
+}
