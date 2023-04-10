@@ -22,7 +22,9 @@ import { DataTablesModule } from "angular-datatables";
 import { TotalResultadosComponent } from './componentes/total-resultados/total-resultados.component';
 import { ErrorComponent } from './componentes/error/error.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { EstadisticasComponent } from './componentes/estadisticas/estadisticas.component';
+import { ChartModule } from 'angular-highcharts';
+import { SacardatosService } from './servicios/sacardatos.service';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     InformacionComponent,
     BautismosComponent,
     TotalResultadosComponent,
-    ErrorComponent
+    ErrorComponent,
+    EstadisticasComponent
   ],
   imports: [
     BrowserModule,
@@ -48,9 +51,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ReactiveFormsModule,
     FullCalendarModule,
     DataTablesModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ChartModule
   ],
-  providers: [AuthService, NgxSpinnerService],
+  providers: [AuthService, NgxSpinnerService, SacardatosService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
