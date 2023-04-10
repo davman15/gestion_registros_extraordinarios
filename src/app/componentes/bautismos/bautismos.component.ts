@@ -9,6 +9,7 @@ import { map } from 'rxjs';
 import { IBautismo } from 'src/app/models/IBautismo';
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import * as moment from 'moment';
+import Swal from 'sweetalert2';
 declare var $: any;
 
 @Component({
@@ -30,7 +31,7 @@ export class BautismosComponent implements OnInit {
   bautismosCalendario: EventInput[] = [];
   bautismosListaTabla: any;
   coleccionBautismos!: AngularFirestoreCollection<any>;
-  fechaBautismo!: any;
+  fechaBautismo: any = localStorage.getItem('fechaBautismo');
   personas: any;
   constructor(private db: AngularFirestore, private formBuilder: FormBuilder) { }
 
@@ -59,20 +60,11 @@ export class BautismosComponent implements OnInit {
 
   ngAfterViewInit(): void {
     this.calendarioBautismo.getApi().on('eventClick', (info) => {
-      /*let id = info.event.id;
-      localStorage.setItem('idBautismo', id);
-      this.idBautismo = localStorage.getItem('idBautismo')!.toString();*/
       let fecha = info.event.start;
       let fechaFormateada = moment(fecha).format('YYYY-MM-DD');
-
       this.fechaBautismo = fechaFormateada;
+      localStorage.setItem('fechaBautismo', this.fechaBautismo);
       this.obtenerBautismos();
-      /*const sub = this.coleccionBautismos.doc(id).valueChanges().subscribe(data => {
-        this.modoEdicion = true;
-        $('#modalBautismo').modal('show');
-        //this.rellenarDatosFormulario(data, id);
-        sub.unsubscribe();
-      });*/
     });
   }
 
@@ -83,7 +75,16 @@ export class BautismosComponent implements OnInit {
       });
   }
 
-  /*rellenarDatosFormulario(evento: any, id: string) {
+  editarBautismo(id: string) {
+    const sub = this.coleccionBautismos.doc(id).valueChanges().subscribe(data => {
+      this.modoEdicion = true;
+      $('#modalBautismo').modal('show');
+      this.rellenarDatosFormulario(data, id);
+      sub.unsubscribe();
+    });
+  }
+
+  rellenarDatosFormulario(evento: any, id: string) {
     for (let propiedad in evento) {
       if (propiedad == 'fechaBautismo') {
         let fecha = moment(evento[propiedad]).format('YYYY-MM-DD');
@@ -99,7 +100,7 @@ export class BautismosComponent implements OnInit {
         }
       }
     }
-  }*/
+  }
 
   cargarBautismosCalendario() {
     this.coleccionBautismos.valueChanges().pipe(
@@ -107,25 +108,23 @@ export class BautismosComponent implements OnInit {
         // Agrupar los bautismos por fecha
         const bautismosPorFecha = bautismos.reduce((acumulador, bautismo) => {
           const fecha = new Date(bautismo.fechaBautismo).toISOString().slice(0, 10);
-          if (!acumulador[fecha]) {
+          if (!acumulador[fecha])
             acumulador[fecha] = [];
-          }
           acumulador[fecha].push(bautismo);
           return acumulador;
         }, {});
-  
+
         // Crear los eventos de calendario, uno por fecha
         const eventos = Object.keys(bautismosPorFecha).map(fecha => {
           const bautismosEnFecha = bautismosPorFecha[fecha];
           const bautismo = bautismosEnFecha[0]; // Tomar el primer bautismo de la fecha
           return {
             id: bautismo.id,
-            title: "Bautismos",
+            title: "Dia Bautismo",
             start: new Date(bautismo.fechaBautismo),
             allDay: true
           };
         });
-  
         return eventos;
       })
     ).subscribe(eventos => {
@@ -134,6 +133,9 @@ export class BautismosComponent implements OnInit {
   }
 
   abrirModalBautismo() {
+    this.modoEdicion = false;
+    if (this.form)
+      this.form.reset();
     $('#modalBautismo').modal('show');
   }
 
@@ -145,22 +147,9 @@ export class BautismosComponent implements OnInit {
       apellidos: ['', Validators.required],
       oficiante: ['', Validators.required],
       iglesia: ['', Validators.required]
-    }, {
-      validator: this.validarFechas.bind(this)
     });
   }
 
-  validarFechas() {
-    if (!this.formGroup) {
-      return null;
-    }
-    const fechaIntroducida = new Date(this.formGroup.get('fechaBautismo')!.value);
-    const fechaHoy = new Date();
-    if (fechaHoy.getTime() > fechaIntroducida.getTime()) {
-      return { fechaInvalida: true };
-    }
-    return null;
-  }
   get f() {
     return this.formGroup.controls;
   }
@@ -182,13 +171,35 @@ export class BautismosComponent implements OnInit {
   aniadirBautismo(bautismo: IBautismo) {
     this.coleccionBautismos.doc(bautismo.id).set(bautismo);
     this.cerrarModalBautismo(this.modoEdicion, '');
+    this.fechaBautismo = bautismo.fechaBautismo;
+    localStorage.setItem('fechaBautismo', this.fechaBautismo);
   }
 
-  cerrarModalBautismo(modoEdicion: boolean, idEvento: string) {
+  cerrarModalBautismo(modoEdicion: boolean, idBautismo: string) {
     $('#modalBautismo').modal('hide');
     localStorage.setItem('idBautismo', '');
     if (this.form)
       this.form.reset();
+  }
 
+  borrarBautismo(id: string) {
+    Swal.fire({
+      title: '¿Estás seguro de que quieres eliminar esta persona?',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.value) {
+        this.coleccionBautismos.doc(id).delete().then(() => {
+          // Consulta para saber si hay valores agrupados existentes a partir de una fecha
+          this.coleccionBautismos.ref.where("fechaBautismo", "==", localStorage.getItem('fechaBautismo')).get().then((querySnapshot) => {
+            if (querySnapshot.size == 0) {
+              localStorage.setItem('fechaBautismo', '');
+              this.fechaBautismo = "";
+            }
+          });
+        });
+      }
+    });
   }
 }

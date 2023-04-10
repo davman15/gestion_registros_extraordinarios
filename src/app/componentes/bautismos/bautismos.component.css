@@ -16,3 +16,7 @@
   :host ::ng-deep .fc-toolbar button {
     margin-top: 5px;
   }
+
+  .oculto {
+    display: none;
+  }
