@@ -139,7 +139,7 @@ export class InicioComponent {
 
   formularios() {
     this.formGroup1 = this.formBuilder1.group({
-      id: [''],
+      id: [localStorage.getItem('idEvento')],
       item: ['', Validators.required],
       fechaInicio: ['', Validators.required],
       fechaInicioHora: ['', Validators.required],
@@ -176,6 +176,7 @@ export class InicioComponent {
     if (modoEdicion && idEvento != "")
       this.borrarEvento(idEvento);
 
+    localStorage.setItem('idEvento', '');
     $('#modalCalendario1').modal('hide');
     if (this.form) {
       this.form.reset();
@@ -188,7 +189,7 @@ export class InicioComponent {
 
   aniadirEvento(evento: IEvento) {
     this.coleccionEventos.doc(evento.id).set(evento);
-    this.cerrarModal(this.modoEdicion, "");
+    this.cerrarModal(this.modoEdicion, localStorage.getItem('idEvento')!.toString());
   }
 
   borrarEvento(id: string) {
@@ -214,8 +215,11 @@ export class InicioComponent {
       return;
     }
     if (!modoEdicion) {
-      evento.id = this.db.createId().toString();
+      localStorage.setItem('idEvento', this.db.createId().toString());
+      evento.id = localStorage.getItem('idEvento')!.toString();
     }
+    console.log(evento);
+
     this.aniadirEvento(evento);
   }
 
@@ -277,7 +281,6 @@ export class InicioComponent {
       if (this.campos[i] == 'dietas')
         total += parseInt(valorCampo) * 26.76;
       else if (this.campos[i] == 'km') {
-        console.log("aqui");
         total += parseFloat(valorCampo) * 0.19;
       }
       else

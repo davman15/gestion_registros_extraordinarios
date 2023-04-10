@@ -21,6 +21,8 @@ import { BautismosComponent } from './componentes/bautismos/bautismos.component'
 import { DataTablesModule } from "angular-datatables";
 import { TotalResultadosComponent } from './componentes/total-resultados/total-resultados.component';
 import { ErrorComponent } from './componentes/error/error.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 @NgModule({
   declarations: [
@@ -45,7 +47,8 @@ import { ErrorComponent } from './componentes/error/error.component';
     NgxSpinnerModule,
     ReactiveFormsModule,
     FullCalendarModule,
-    DataTablesModule
+    DataTablesModule,
+    BrowserAnimationsModule
   ],
   providers: [AuthService, NgxSpinnerService],
   bootstrap: [AppComponent],
