@@ -110,6 +110,9 @@ export class InicioComponent {
 
     this.calendario.getApi().on('eventClick', (info) => {
       let id = info.event.id;
+      localStorage.setItem('idEvento', id);
+      this.idEvento = localStorage.getItem('idEvento')!.toString();
+
       const sub = this.coleccionEventos.doc(id).valueChanges().subscribe(data => {
         this.modoEdicion = true;
         $('#modalCalendario1').modal('show');
@@ -178,9 +181,8 @@ export class InicioComponent {
 
     localStorage.setItem('idEvento', '');
     $('#modalCalendario1').modal('hide');
-    if (this.form) {
+    if (this.form)
       this.form.reset();
-    }
 
     this.formGroup1.get('fechaInicioHora')!.setValue("");
     this.formGroup1.get('fechaFinHora')!.setValue("");
@@ -189,7 +191,7 @@ export class InicioComponent {
 
   aniadirEvento(evento: IEvento) {
     this.coleccionEventos.doc(evento.id).set(evento);
-    this.cerrarModal(this.modoEdicion, localStorage.getItem('idEvento')!.toString());
+    this.cerrarModal(this.modoEdicion, '');
   }
 
   borrarEvento(id: string) {
@@ -201,6 +203,8 @@ export class InicioComponent {
     }).then((result) => {
       if (result.value)
         this.coleccionEventos.doc(id).delete();
+      if (this.form)
+        this.form.reset();
     });
   }
 
