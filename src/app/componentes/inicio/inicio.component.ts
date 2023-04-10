@@ -42,6 +42,8 @@ export class InicioComponent {
     showNonCurrentDates: false,
     fixedWeekCount: false,
     selectable: true,
+    navLinks: true,
+    dayMaxEvents: true,
     eventTimeFormat: {
       hour: '2-digit',
       minute: '2-digit'
@@ -92,7 +94,7 @@ export class InicioComponent {
       })
     ).subscribe(eventos => {
       this.eventos = eventos;
-    })
+    });
 
     this.cargarItems();
     this.formularios();
@@ -222,8 +224,6 @@ export class InicioComponent {
       localStorage.setItem('idEvento', this.db.createId().toString());
       evento.id = localStorage.getItem('idEvento')!.toString();
     }
-    console.log(evento);
-
     this.aniadirEvento(evento);
   }
 
@@ -265,7 +265,6 @@ export class InicioComponent {
     this.arrayItems['Regional'] = 'Regional';
     this.arrayItems['Nacional'] = 'Nacional';
     this.arrayItems['Interesados EB'] = 'Interesados EB';
-    this.arrayItems['Bautismos'] = 'Bautismos';
     this.arrayItems['Profesiones'] = 'Profesiones';
     this.arrayItems['Personas Visitadas'] = 'Personas Visitadas';
     this.arrayItems['Visitas Misioneras'] = 'Visitas Misioneras';

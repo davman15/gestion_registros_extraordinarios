@@ -3,39 +3,32 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12 col-lg-6 col-sm-12">
-      <full-calendar [options]="calendarOptions"></full-calendar>
+      <full-calendar [options]="calendarOptions" #calendarioBautismo [events]="bautismosCalendario"></full-calendar>
     </div>
     <div class="col-md-12 col-lg-6 col-sm-12 mt-sm-0 mt-md-5 mt-lg-5 mb-3">
-      <button class="btn btn-success mt-5 mb-5"><i class="bi bi-person-plus-fill"></i></button>
-      <table datatable [dtOptions]='tablaOpciones' #tabla class="table table-bordered text-center table-responsive overflow-x:auto">
+      <button class="btn btn-success mt-5 mb-5" (click)="abrirModalBautismo()"><i
+          class="bi bi-person-plus-fill"></i></button>
+      <div class="d-flex justify-content-center align-items-center ">
+        <h5 *ngIf="fechaBautismo==null" class="text-center p-5 border border-secondary">No hay fecha bautismal seleccionada</h5>
+      </div>
+      <table #tabla class="table table-bordered text-center table-responsive overflow-x:auto"
+        *ngIf="fechaBautismo!=null">
         <thead class="bg-primary text-white">
           <tr>
-            <th>Nª</th>
+            <th>Iglesia</th>
             <th>Nombre</th>
+            <th>Apellidos</th>
             <th>Oficiante</th>
             <th data-orderable="false"></th>
             <th data-orderable="false"></th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>David</td>
-            <td>David Manrique Paa</td>
-            <td><button class="btn btn-primary"><i class="bi bi-pencil-square"></i></button></td>
-            <td><button class="btn btn-danger"><i class="bi bi-trash"></i></button></td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Jack</td>
-            <td>Jack</td>
-            <td><button class="btn btn-primary"><i class="bi bi-pencil-square"></i></button></td>
-            <td><button class="btn btn-danger"><i class="bi bi-trash"></i></button></td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Manrik</td>
-            <td>Manrik</td>
+          <tr *ngFor="let bautismo of bautismosListaTabla">
+            <td>{{bautismo.iglesia}}</td>
+            <td>{{bautismo.nombre}}</td>
+            <td>{{bautismo.apellidos}}</td>
+            <td>{{bautismo.oficiante}}</td>
             <td><button class="btn btn-primary"><i class="bi bi-pencil-square"></i></button></td>
             <td><button class="btn btn-danger"><i class="bi bi-trash"></i></button></td>
           </tr>
@@ -43,4 +36,58 @@
       </table>
     </div>
   </div>
+</div>
+
+<div class="modal fade" id="modalBautismo" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+  aria-labelledby="modalBautismo">
+  <form [formGroup]="formGroup" #formularioBautismo="ngForm" (ngSubmit)="registrarBautismo(modoEdicion)">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
+          <h4>Nombre</h4>
+          <input type="text" formControlName="nombre" required class="form-control mb-3">
+          <span class="help-block text-danger" *ngIf="f['nombre'].touched && f['nombre'].invalid">
+            <span *ngIf="f['nombre'].errors && f['nombre'].errors['required']">Introduzca
+              un nombre
+            </span>
+          </span>
+          <h4 class="mt-2">Apellidos</h4>
+          <input type="text" formControlName="apellidos" class="form-control mb-3">
+          <span class="help-block text-danger" *ngIf="f['apellidos'].touched && f['apellidos'].invalid">
+            <span *ngIf="f['apellidos'].errors && f['apellidos'].errors['required']">Introduzca
+              apellidos
+            </span>
+          </span>
+          <h4 class="mt-2">Oficiante</h4>
+          <input type="text" formControlName="oficiante" class="form-control mb-3">
+          <span class="help-block text-danger" *ngIf="f['oficiante'].touched && f['oficiante'].invalid">
+            <span *ngIf="f['oficiante'].errors && f['oficiante'].errors['required']">Introduzca
+              un oficiante
+            </span>
+          </span>
+          <h4 class="mt-2">Iglesia</h4>
+          <input type="text" formControlName="iglesia" class="form-control mb-3">
+          <span class="help-block text-danger" *ngIf="f['iglesia'].touched && f['iglesia'].invalid">
+            <span *ngIf="f['iglesia'].errors && f['iglesia'].errors['required']">Introduzca
+              una iglesia
+            </span>
+          </span>
+          <h4 class="mt-2">Fecha del bautismo</h4>
+          <input type="date" formControlName="fechaBautismo" id="fechaBautismo" class="form-control mb-2">
+          <span class="help-block text-danger" *ngIf="f['fechaBautismo'].touched && f['fechaBautismo'].invalid">
+            <span *ngIf="f['fechaBautismo'].errors && f['fechaBautismo'].errors['required']">Seleccione
+              una fecha
+            </span>
+          </span>
+          <div class="text-danger" *ngIf="formularioBautismo.errors?.['fechaInvalida']">La fecha
+            introducida debe ser posterior a la fecha de hoy.</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" (click)="cerrarModalBautismo(modoEdicion,idBautismo)"
+            class="btn btn-danger col">Cancelar</button>
+          <button type="submit" class="btn btn-success col">Agregar</button>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>
