@@ -1,0 +1,31 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-9 col-xl-9 col-sm-9 offset-md-3">
+      <div class="table-responsive" style="overflow-x: auto;">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th *ngFor="let dia of dias" class="bg-primary text-white px-5" style="font-size: 40px;">{{ dia }}</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3 col-xl-3 col-sm-3">
+      <div class="form-floating mt-5">
+        <select class="form-select" aria-label="Floating label" (ngModelChange)="onSelectUsuario($event)"
+          [(ngModel)]="usuarioSeleccionado">
+          <option selected>-- Seleccione un pastor --</option>
+          <option *ngFor="let nombre of nombres | keyvalue" [value]="nombre.key">{{nombre.value}}</option>
+        </select>
+        <label for="floatingSelect">Pastores</label>
+      </div>
+    </div>
+    <div class="col-md-9 col-sm-9 col-xl-9">
+      <h5 class="text-center mt-5" *ngIf="usuarioSeleccionado=='-- Seleccione un pastor --'">Seleccione un Pastor </h5>
+      <p class="text-center mt-5" *ngFor="let evento of eventosPorUsuario">{{evento.eventos.length}} {{evento.item}}</p>
+    </div>
+  </div>
+</div>

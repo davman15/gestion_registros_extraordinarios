@@ -25,16 +25,15 @@ export class AuthService {
   }
 
   agregarUsuarioFirestore(usuario: any) {
-    const userReferencia: AngularFirestoreDocument<any> = this.firestore.doc('usuarios/' + usuario.uid);
-    const userData: IUsuario = {
+    const referenciaUsuario: AngularFirestoreDocument<any> = this.firestore.doc('usuarios/' + usuario.uid);
+    const datosUsuario: IUsuario = {
       uid: usuario.uid,
       email: usuario.email,
       displayName: usuario.displayName,
       photoURL: usuario.photoURL,
       emailVerified: usuario.emailVerified
     }
-
-    return userReferencia.set(userData, {
+    return referenciaUsuario.set(datosUsuario, {
       merge: true
     });
   }
@@ -53,7 +52,6 @@ export class AuthService {
           }
         });
       }
-
     } catch (error) {
       this.validacionesEspañol(error);
     }

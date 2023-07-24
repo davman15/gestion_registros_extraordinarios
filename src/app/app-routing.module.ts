@@ -10,6 +10,7 @@ import { map } from 'rxjs/operators';
 import { AngularFireAuthGuard, redirectUnauthorizedTo } from '@angular/fire/compat/auth-guard';
 import { ErrorComponent } from './componentes/error/error.component';
 import { EstadisticasComponent } from './componentes/estadisticas/estadisticas.component';
+import { InformesComponent } from './componentes/informes/informes.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo('error');
 const uidAdmin = '';
@@ -23,10 +24,11 @@ const routes: Routes = [
   { path: 'informacion', component: InformacionComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
   { path: 'bautismos', component: BautismosComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
   { path: 'estadisticas', component: EstadisticasComponent },
+  { path: 'informes', component: InformesComponent },
   { path: 'error', component: ErrorComponent },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '**', redirectTo: 'error', pathMatch: 'full' }
-  
+
 ];
 
 @NgModule({

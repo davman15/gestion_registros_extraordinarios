@@ -25,6 +25,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EstadisticasComponent } from './componentes/estadisticas/estadisticas.component';
 import { ChartModule } from 'angular-highcharts';
 import { SacardatosService } from './servicios/sacardatos.service';
+import { InformesComponent } from './componentes/informes/informes.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { SacardatosService } from './servicios/sacardatos.service';
     BautismosComponent,
     TotalResultadosComponent,
     ErrorComponent,
-    EstadisticasComponent
+    EstadisticasComponent,
+    InformesComponent
   ],
   imports: [
     BrowserModule,
