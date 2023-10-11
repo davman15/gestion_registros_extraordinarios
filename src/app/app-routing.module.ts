@@ -11,6 +11,7 @@ import { AngularFireAuthGuard, redirectUnauthorizedTo } from '@angular/fire/comp
 import { ErrorComponent } from './componentes/error/error.component';
 import { EstadisticasComponent } from './componentes/estadisticas/estadisticas.component';
 import { InformesComponent } from './componentes/informes/informes.component';
+import { SubirArchivosComponent } from './subir-archivos/subir-archivos.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo('error');
 const uidAdmin = '';
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'bautismos', component: BautismosComponent, canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin } },
   { path: 'estadisticas', component: EstadisticasComponent },
   { path: 'informes', component: InformesComponent },
+  { path: 'subirArchivos', component: SubirArchivosComponent },
   { path: 'error', component: ErrorComponent },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '**', redirectTo: 'error', pathMatch: 'full' }

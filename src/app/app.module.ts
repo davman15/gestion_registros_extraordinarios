@@ -27,6 +27,7 @@ import { EstadisticasComponent } from './componentes/estadisticas/estadisticas.c
 import { ChartModule } from 'angular-highcharts';
 import { SacardatosService } from './servicios/sacardatos.service';
 import { InformesComponent } from './componentes/informes/informes.component';
+import { SubirArchivosComponent } from './subir-archivos/subir-archivos.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { InformesComponent } from './componentes/informes/informes.component';
     TotalResultadosComponent,
     ErrorComponent,
     EstadisticasComponent,
-    InformesComponent
+    InformesComponent,
+    SubirArchivosComponent
   ],
   imports: [
     BrowserModule,
