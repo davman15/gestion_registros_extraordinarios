@@ -13,6 +13,7 @@ import { IEvento } from 'src/app/models/IEvento';
 import * as moment from 'moment';
 import 'moment-timezone';
 import Swal from 'sweetalert2';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 declare var $: any;
 
 @Component({
@@ -22,7 +23,7 @@ declare var $: any;
 })
 
 export class InicioComponent {
-  constructor(private db: AngularFirestore, private formBuilder1: FormBuilder) { }
+  constructor(private db: AngularFirestore, private formBuilder1: FormBuilder, private dbStorage: AngularFireStorage) { }
 
   formGroup1!: FormGroup;
   campos = ['gastos', 'transporte', 'dietas', 'viajes', 'alojamiento', 'km'];
@@ -31,9 +32,11 @@ export class InicioComponent {
   @ViewChild('formulario') form!: NgForm;
   idEvento!: string;
   idUsuario!: any;
+  nombreUsuario!: any;
   eventos: EventInput[] = [];
   coleccionEventos!: AngularFirestoreCollection<any>;
   arrayItems: { [key: string]: string } = {};
+  archivosArray: File[] = []
 
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
@@ -151,6 +154,7 @@ export class InicioComponent {
       fechaFin: ['', Validators.required],
       fechaFinHora: ['', Validators.required],
       colorEvento: ['#000000'],
+      archivosSubidos: [[]],
       concepto: [''],
       trayecto: [''],
       gastos: [null, Validators.pattern(/^\d+(?:[,.]\d{2})?$/)],
@@ -182,6 +186,7 @@ export class InicioComponent {
       this.borrarEvento(idEvento);
 
     localStorage.setItem('idEvento', '');
+    this.archivosArray = [];
     $('#modalCalendario1').modal('hide');
     if (this.form)
       this.form.reset();
@@ -224,7 +229,46 @@ export class InicioComponent {
       localStorage.setItem('idEvento', this.db.createId().toString());
       evento.id = localStorage.getItem('idEvento')!.toString();
     }
+    this.subirArchivos();
+    //Lo vacio aqui porque si no me daba un error, a la hora de actualizar
+    evento.archivosSubidos = [];
     this.aniadirEvento(evento);
+    //this.cerrarModal(this.modoEdicion, '');
+  }
+
+  aniadirArchivo(event: Event) {
+    const seleccionador = event.target as HTMLInputElement;
+    //Si hay archivos seleccionados
+    if (seleccionador.files) {
+      //Se recorren todos los archivos que puso el usuario y los añade a mi array que luego lo usare
+      for (let i = 0; i < seleccionador.files.length; i++) {
+        this.archivosArray.push(seleccionador.files[i]);
+      }
+    }
+  }
+
+  subirArchivos() {
+    const fecha = new Date();
+    const dia = fecha.getDate();
+    const mes = fecha.getMonth() + 1;
+    const anio = fecha.getFullYear();
+    const hora = fecha.getHours();
+    const minutos = fecha.getMinutes();
+    const archivos: FileList | null = this.formGroup1.get('archivosSubidos')!.value;
+
+    if (archivos && archivos.length > 0) {
+      //En mi localStorge hay un Json enorme con muchos datos entre ellos saco el nombre del usuario actual
+      this.nombreUsuario = JSON.parse(localStorage.getItem('user') ?? "").displayName;
+      this.archivosArray.forEach((archivo: File) => {
+        const ficheroPath = `usuarios/${this.nombreUsuario}/${dia}-${mes}-${anio}/${hora}:${minutos}/${archivo.name}`;
+        //Aqui se sube
+        const tarea = this.dbStorage.upload(ficheroPath, archivo);
+        // Maneja el progreso y los estados de carga si es necesario
+        tarea.snapshotChanges().subscribe((snapshot) => {
+          console.log("Se subio el archivo");
+        });
+      });
+    }
   }
 
   administrarFecha(fecha: Date, hora: string): any {

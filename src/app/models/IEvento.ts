@@ -14,5 +14,6 @@ export interface IEvento {
     viajes: string,
     alojamiento: string,
     km: string,
-    total: string
+    total: string,
+    archivosSubidos: any
 }

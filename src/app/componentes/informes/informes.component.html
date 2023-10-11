@@ -1,18 +1,5 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-9 col-xl-9 col-sm-9 offset-md-3">
-      <div class="table-responsive" style="overflow-x: auto;">
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th *ngFor="let dia of dias" class="bg-primary text-white px-5" style="font-size: 40px;">{{ dia }}</th>
-            </tr>
-          </thead>
-        </table>
-      </div>
-    </div>
-  </div>
-  <div class="row">
     <div class="col-md-3 col-xl-3 col-sm-3">
       <div class="form-floating mt-5">
         <select class="form-select" aria-label="Floating label" (ngModelChange)="onSelectUsuario($event)"
@@ -25,7 +12,76 @@
     </div>
     <div class="col-md-9 col-sm-9 col-xl-9">
       <h5 class="text-center mt-5" *ngIf="usuarioSeleccionado=='-- Seleccione un pastor --'">Seleccione un Pastor </h5>
-      <p class="text-center mt-5" *ngFor="let evento of eventosPorUsuario">{{evento.eventos.length}} {{evento.item}}</p>
+      <table class="table table-light border border-1">
+        <thead>
+          <tr>
+            <th>Apellido Nombre</th>
+            <th>Status</th>
+            <th>Int. Est Biblicos</th>
+            <th>Bautismos</th>
+            <th>Prof. de Fe</th>
+            <th>Personas Visitadas</th>
+            <th>Personas Visitas mision</th>
+            <th>Cultos</th>
+            <th>Espiritual</th>
+            <th>Varias</th>
+            <th>Ceremonias</th>
+            <th>Formaciones</th>
+            <th>Visitas</th>
+            <th>Consejos</th>
+            <th>Administ</th>
+            <th>Reuniones</th>
+            <th>Campaña</th>
+            <th>Conferencias</th>
+            <th>Grupos Pequeños</th>
+            <th>Estudios biblicos</th>
+            <th>Misioneras</th>
+            <th>Secretarios</th>
+            <th>Ancianos</th>
+            <th>Tesorero</th>
+            <th>Red Social</th>
+            <th>Gestiones</th>
+            <th>Entrevistas</th>
+            <th>Sociales</th>
+            <th>Regional</th>
+            <th>Nacional</th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          <tr *ngIf="eventosPorUsuario?.acumuladoMes && usuarioSeleccionado!='-- Seleccione un pastor --'">
+            <td>{{pastorNombre}}</td>
+            <td>Status</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Interesados EB"] }}</td>
+            <td>{{bautismosPorUsuario}}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Profesiones"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Personas Visitadas"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Visitas Misioneras"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Cultos"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Espiritual"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Varias"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Ceremonia"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Formación"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Visitas"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Consejos"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Administración"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Reuniones"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Campaña"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Conferencia"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Grupo Pequeño"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Estudios Biblicos"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Misioneras"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Secretario"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Ancianos"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Tesorero"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Redes Sociales"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Gestiones"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Entrevistas"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Sociales"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Regional"] }}</td>
+            <td>{{ eventosPorUsuario.acumuladoMes["Nacional"] }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

@@ -2,7 +2,7 @@
 <div class="container my-4">
     <div class="row">
         <div class="col-12 ">
-            <div class="calendario text-center" >
+            <div class="calendario text-center">
                 <full-calendar #calendario [options]="calendarOptions" [events]="eventos" [timeFormat]="'h:mm'">
                 </full-calendar>
             </div>
@@ -73,6 +73,11 @@
                                 <h4 class="my-2">Color</h4>
                                 <input type="color" id="colorEvento" formControlName="colorEvento"
                                     class="form-control my-2">
+                                <div class="mb-3">
+                                    <label class="form-label">Introduzca Facturas Asociadas</label>
+                                    <input class="form-control" type="file" (change)="aniadirArchivo($event)" 
+                                    formControlName="archivosSubidos" multiple>
+                                </div>
                             </div>
                             <div class="col-5 offset-1">
                                 <h4>Gastos Varios</h4>
@@ -143,7 +148,8 @@
                     <button type="button" class="btn text-center col"
                         [ngClass]="{'btn-danger':!modoEdicion,'btn-primary':modoEdicion}"
                         (click)="cerrarModal(modoEdicion,idEvento)">{{ modoEdicion ? 'Borrar':'Cancelar' }}</button>
-                    <button type="submit" class="btn btn-success col">{{ modoEdicion ? 'Actualizar':'Registrar'}}</button>
+                    <button type="submit" class="btn btn-success col">{{ modoEdicion ?
+                        'Actualizar':'Registrar'}}</button>
                 </div>
             </div>
         </form>

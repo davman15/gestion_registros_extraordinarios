@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from "@angular/fire/compat/auth";
 import { AngularFirestoreModule } from "@angular/fire/compat/firestore";
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { LoginComponent } from './componentes/login/login.component';
 import { RegistroComponent } from './componentes/registro/registro.component';
 import { InicioComponent } from './componentes/inicio/inicio.component';
@@ -48,6 +49,7 @@ import { InformesComponent } from './componentes/informes/informes.component';
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
     AngularFirestoreModule,
+    AngularFireStorageModule,
     FormsModule,
     NgxSpinnerModule,
     ReactiveFormsModule,
