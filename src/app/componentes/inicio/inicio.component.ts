@@ -227,8 +227,6 @@ export class InicioComponent {
       evento.id = localStorage.getItem('idEvento')!.toString();
     }
 
-    //Lo vacio aqui porque si no me daba un error, a la hora de actualizar
-    evento.archivosSubidos = [];
     this.aniadirEvento(evento);
     //this.cerrarModal(this.modoEdicion, '');
   }

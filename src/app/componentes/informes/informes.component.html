@@ -12,7 +12,7 @@
     </div>
     <div class="col-md-9 col-sm-9 col-xl-9">
       <h5 class="text-center mt-5" *ngIf="usuarioSeleccionado=='-- Seleccione un pastor --'">Seleccione un Pastor </h5>
-      <table class="table table-light border border-1">
+      <table class="table table-light border border-1 m-5" #tablaResumen>
         <thead>
           <tr>
             <th>Apellido Nombre</th>
@@ -82,6 +82,11 @@
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+  <div class="row" *ngIf="usuarioSeleccionado!='-- Seleccione un pastor --'">
+    <div class="col-12">
+      <button class="btn btn-danger" (click)="generarPDF()">Generar PDF <i class="bi bi-file-pdf-fill"></i></button>
     </div>
   </div>
 </div>

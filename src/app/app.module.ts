@@ -28,6 +28,7 @@ import { ChartModule } from 'angular-highcharts';
 import { SacardatosService } from './servicios/sacardatos.service';
 import { InformesComponent } from './componentes/informes/informes.component';
 import { SubirArchivosComponent } from './subir-archivos/subir-archivos.component';
+import { BarraNavegacionAdminComponent } from './barra-navegacion-admin/barra-navegacion-admin.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { SubirArchivosComponent } from './subir-archivos/subir-archivos.componen
     ErrorComponent,
     EstadisticasComponent,
     InformesComponent,
-    SubirArchivosComponent
+    SubirArchivosComponent,
+    BarraNavegacionAdminComponent
   ],
   imports: [
     BrowserModule,

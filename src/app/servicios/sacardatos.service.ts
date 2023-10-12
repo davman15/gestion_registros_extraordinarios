@@ -92,6 +92,25 @@ export class SacardatosService {
     return datosPastor.displayName;
   }
 
+  async obtenerEventosDetalladosAgrupadosPorMes(uid:string): Promise<any[]>{
+    const fecha = new Date();
+    const mesActual = fecha.getMonth() + 1;
+
+    //Consulta de eventos que están dentro del rango del mes actual
+    const querySnapshot = await this.firestore
+      .collection(`usuarios/${uid}/eventos`)
+      .ref.where('fechaInicio', '>=', `${fecha.getFullYear()}-${mesActual.toString().padStart(2, '0')}-01T00:00:00Z`)
+      .where('fechaInicio', '<=', `${fecha.getFullYear()}-${mesActual.toString().padStart(2, '0')}-31T23:59:59Z`)
+      .get();
+      const eventos: any[] = [];
+      querySnapshot.docs.forEach(doc => {
+        const evento: any = doc.data();
+        eventos.push(evento);
+      });
+      
+      return eventos;
+  }
+
   async obtenerEventosAgrupadosPorMes(uid: string): Promise<any[]> {
     const fecha = new Date();
     const mesActual = fecha.getMonth() + 1;
