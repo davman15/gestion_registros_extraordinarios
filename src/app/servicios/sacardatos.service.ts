@@ -69,57 +69,50 @@ export class SacardatosService {
     return nombres;
   }
 
-  async obtenerBautismosAgrupadosPorMes(uid: string): Promise<any> {
-    const fecha = new Date();
-    const mesActual = fecha.getMonth() + 1;
-    const anioActual = fecha.getFullYear();
+  async obtenerBautismosAgrupadosPorMes(uid: string, mesElegido: number, anioElegido: number): Promise<any> {
     const querySnapshot = await this.firestore
       .collection(`usuarios/${uid}/bautismos`)
-      .ref.where('fechaBautismo', '>=', `${anioActual}-${mesActual.toString().padStart(2, '0')}-01`)
-      .where('fechaBautismo', '<=', `${anioActual}-${mesActual.toString().padStart(2, '0')}-31`)
+      .ref.where('fechaBautismo', '>=', `${anioElegido}-${mesElegido.toString().padStart(2, '0')}-01`)
+      .where('fechaBautismo', '<=', `${anioElegido}-${mesElegido.toString().padStart(2, '0')}-31`)
       .get();
 
     return querySnapshot.size;
   }
 
-  async obtenerNombrePastor(uid: string): Promise<string>{
+  async obtenerNombrePastor(uid: string, nombrePastor: string): Promise<string> {
     const querySnapshot = await this.firestore
       .collection("usuarios").doc(uid)
       .get().toPromise();
 
     const datosPastor: any = querySnapshot?.data();
-    
-    return datosPastor.displayName;
+    if (datosPastor == null)
+      return nombrePastor;
+    else
+      return datosPastor.displayName;
   }
 
-  async obtenerEventosDetalladosAgrupadosPorMes(uid:string): Promise<any[]>{
-    const fecha = new Date();
-    const mesActual = fecha.getMonth() + 1;
-
+  async obtenerEventosDetalladosAgrupadosPorMes(uid: string, mesElegido: number, anioElegido: number): Promise<any[]> {
     //Consulta de eventos que están dentro del rango del mes actual
     const querySnapshot = await this.firestore
       .collection(`usuarios/${uid}/eventos`)
-      .ref.where('fechaInicio', '>=', `${fecha.getFullYear()}-${mesActual.toString().padStart(2, '0')}-01T00:00:00Z`)
-      .where('fechaInicio', '<=', `${fecha.getFullYear()}-${mesActual.toString().padStart(2, '0')}-31T23:59:59Z`)
+      .ref.where('fechaInicio', '>=', `${anioElegido}-${mesElegido.toString().padStart(2, '0')}-01T00:00:00Z`)
+      .where('fechaInicio', '<=', `${anioElegido}-${mesElegido.toString().padStart(2, '0')}-31T23:59:59Z`)
       .get();
-      const eventos: any[] = [];
-      querySnapshot.docs.forEach(doc => {
-        const evento: any = doc.data();
-        eventos.push(evento);
-      });
-      
-      return eventos;
+    const eventos: any[] = [];
+    querySnapshot.docs.forEach(doc => {
+      const evento: any = doc.data();
+      eventos.push(evento);
+    });
+
+    return eventos;
   }
 
-  async obtenerEventosAgrupadosPorMes(uid: string): Promise<any[]> {
-    const fecha = new Date();
-    const mesActual = fecha.getMonth() + 1;
-
+  async obtenerEventosAgrupadosPorMes(uid: string, mesElegido: number, anioElegido: number): Promise<any[]> {
     //Consulta de eventos que están dentro del rango del mes actual
     const querySnapshot = await this.firestore
       .collection(`usuarios/${uid}/eventos`)
-      .ref.where('fechaInicio', '>=', `${fecha.getFullYear()}-${mesActual.toString().padStart(2, '0')}-01T00:00:00Z`)
-      .where('fechaInicio', '<=', `${fecha.getFullYear()}-${mesActual.toString().padStart(2, '0')}-31T23:59:59Z`)
+      .ref.where('fechaInicio', '>=', `${anioElegido}-${mesElegido.toString().padStart(2, '0')}-01T00:00:00Z`)
+      .where('fechaInicio', '<=', `${anioElegido}-${mesElegido.toString().padStart(2, '0')}-31T23:59:59Z`)
       .get();
 
     const eventos: any[] = []; // Array para almacenar todos los eventos

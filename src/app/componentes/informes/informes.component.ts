@@ -5,6 +5,7 @@ import 'moment/locale/es';
 import { SacardatosService } from 'src/app/servicios/sacardatos.service';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { StorageService } from 'src/app/servicios/storage.service';
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -20,30 +21,53 @@ export class InformesComponent {
   pastorNombre: string = "";
   arrayColumnas: any;
   arrayEventosMes: any;
+  anioSeleccionado!: number;
+  mesSeleccionado!: number;
+  anios: number[] = [];
+  meses: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  nombresMes: string[] = [
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+  ];
+
   @ViewChild("tablaResumen", { static: false }) tabla!: ElementRef
 
 
-  constructor(private firestore: AngularFirestore, private servicio: SacardatosService, private cd: ChangeDetectorRef) { }
+  constructor(private servicioStorage: StorageService, private servicioDatos: SacardatosService) { }
+
   ngOnInit() {
     // Consultar los usuarios
-    this.servicio.obtenerNombres().then((nombres) => {
+    this.servicioDatos.obtenerNombres().then((nombres) => {
       this.usuarioSeleccionado = "-- Seleccione un pastor --";
       this.nombres = nombres;
     });;
 
-    this.cargarArray()
+    const fechaHoy = new Date();
+    this.mesSeleccionado = fechaHoy.getMonth() + 1;
+    this.anioSeleccionado = fechaHoy.getFullYear();
+
+    this.cargarArray();
+    this.generarOpcionesAnios();
   }
 
   cargarArray() {
-    this.arrayColumnas = this.servicio.cargarItems();
+    this.arrayColumnas = this.servicioDatos.cargarItems();
   }
 
-  async onSelectUsuario(usuario: string) {
+  generarOpcionesAnios() {
+    const anioActual = new Date().getFullYear();
+    for (let anio = anioActual - 20; anio <= anioActual + 20; anio++) {
+      this.anios.push(anio);
+    }
+  }
+
+  async actualizarDatos(usuario: string, mes: number, anio: number) {
     try {
-      const eventos = await this.servicio.obtenerEventosAgrupadosPorMes(usuario);
-      const bautismos = await this.servicio.obtenerBautismosAgrupadosPorMes(usuario);
-      const nombrePastor = await this.servicio.obtenerNombrePastor(usuario);
-      const eventosMesPdf = await this.servicio.obtenerEventosDetalladosAgrupadosPorMes(usuario);
+      const eventos = await this.servicioDatos.obtenerEventosAgrupadosPorMes(usuario, mes, anio);
+      const bautismos = await this.servicioDatos.obtenerBautismosAgrupadosPorMes(usuario, mes, anio);
+      const nombrePastor = await this.servicioDatos.obtenerNombrePastor(usuario, this.pastorNombre);
+      const eventosMesPdf = await this.servicioDatos.obtenerEventosDetalladosAgrupadosPorMes(usuario, mes, anio);
+
       this.eventosPorUsuario = eventos;
       this.bautismosPorUsuario = bautismos;
       this.pastorNombre = nombrePastor;
@@ -53,9 +77,24 @@ export class InformesComponent {
     }
   }
 
+  async onSelectUsuario(usuario: string) {
+    await this.actualizarDatos(usuario, this.mesSeleccionado, this.anioSeleccionado);
+  }
+
+  async onSelectMes(mes: number) {
+    await this.actualizarDatos(this.usuarioSeleccionado, mes, this.anioSeleccionado);
+  }
+
+  async onSelectAnio(anio: number) {
+    await this.actualizarDatos(this.usuarioSeleccionado, this.mesSeleccionado, anio);
+  }
+
+  descargarFacturasMes() {
+    this.servicioStorage.descargarCarpetaUsuario(this.pastorNombre,"12-10-2023");
+  }
+
   generarPDF() {
-    moment.locale('es');
-    let fecha = moment().format('MMMM') + " " + moment().format('YYYY')
+    let fecha = this.nombresMes[this.mesSeleccionado - 1] + " " + this.anioSeleccionado
     //Aqui filtro de lo que genera la consulta por los valores que han hecho en el mes los pastores (los valores que son distintos de 0)
     const contenidoInforme = this.filtrarInformacion(fecha);
 
@@ -128,7 +167,7 @@ export class InformesComponent {
             `Concepto: ${evento.concepto || ""}`,
             `Fecha Inicio: ${this.formatearFecha(evento.fechaInicio)} a las ${evento.fechaInicioHora}`,
             `Fecha Final: ${this.formatearFecha(evento.fechaFin)} a las ${evento.fechaFinHora}`,
-            `Alojamiento Hotel: ${evento.alojamiento || 0}`,
+            `Alojamiento Hotel: ${evento.alojamiento || 0}€`,
             `Trayecto: ${evento.trayecto || ""}`,
             `Gasto Transporte Bus-Metro: ${evento.transporte || 0}€`,
             `Gasto Viajes Avion/Tren: ${evento.viajes || 0}€`,

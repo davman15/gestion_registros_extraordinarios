@@ -29,6 +29,7 @@ import { SacardatosService } from './servicios/sacardatos.service';
 import { InformesComponent } from './componentes/informes/informes.component';
 import { SubirArchivosComponent } from './subir-archivos/subir-archivos.component';
 import { BarraNavegacionAdminComponent } from './barra-navegacion-admin/barra-navegacion-admin.component';
+import { StorageService } from './servicios/storage.service';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,7 @@ import { BarraNavegacionAdminComponent } from './barra-navegacion-admin/barra-na
     BrowserAnimationsModule,
     ChartModule
   ],
-  providers: [AuthService, NgxSpinnerService, SacardatosService],
+  providers: [AuthService, NgxSpinnerService, SacardatosService, StorageService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
