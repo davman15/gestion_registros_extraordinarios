@@ -38,16 +38,8 @@ export class SubirArchivosComponent {
 
   subirArchivos() {
     const fecha = new Date();
-    const dia = fecha.getDate();
     const mes = fecha.getMonth() + 1;
     const anio = fecha.getFullYear();
-    const hora = fecha.getHours();
-    const minutos = fecha.getMinutes();
-    let minutosCadena = "";
-    let horasCadena = "";
-
-    ({ minutosCadena, horasCadena } = this.darFormatoFecha(minutos, minutosCadena, hora, horasCadena));
-
 
     const archivos: FileList | null = this.formGroup1.get('archivosSubidos')!.value;
 
@@ -55,7 +47,7 @@ export class SubirArchivosComponent {
       //En mi localStorge hay un Json enorme con muchos datos entre ellos saco el nombre del usuario actual
       this.nombreUsuario = JSON.parse(localStorage.getItem('user') ?? "").displayName;
       this.archivosArray.forEach((archivo: File) => {
-        const ficheroPath = `usuarios/${this.nombreUsuario}/${dia}-${mes}-${anio}/${horasCadena}:${minutosCadena}/${archivo.name}`;
+        const ficheroPath = `usuarios/${this.nombreUsuario}/${mes}-${anio}/${archivo.name}`;
         //Aqui se sube
         this.dbStorage.upload(ficheroPath, archivo);
         // Maneja el progreso y los estados de carga si es necesario
@@ -64,23 +56,9 @@ export class SubirArchivosComponent {
         });*/
       });
     }
+    //Se vacia el array de Ficheros y se muestra una alerta la usuario
     this.archivosArray = [];
     Swal.fire('Subida Completada', 'Los archivos se subieron correctamente', 'success');
-  }
-
-  private darFormatoFecha(minutos: number, minutosCadena: string, hora: number, horasCadena: string) {
-    if (minutos < 10)
-      minutosCadena = "0" + minutos.toString();
-
-    else
-      minutosCadena = minutos.toString();
-
-    if (hora < 10)
-      horasCadena = "0" + hora.toString();
-
-    else
-      horasCadena = hora.toString();
-    return { minutosCadena, horasCadena };
   }
 
   public get f() {

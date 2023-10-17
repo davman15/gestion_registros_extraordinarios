@@ -1,5 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import 'moment/locale/es';
 import { SacardatosService } from 'src/app/servicios/sacardatos.service';
@@ -30,15 +29,12 @@ export class InformesComponent {
     "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
   ];
 
-  @ViewChild("tablaResumen", { static: false }) tabla!: ElementRef
-
-
   constructor(private servicioStorage: StorageService, private servicioDatos: SacardatosService) { }
 
   ngOnInit() {
     // Consultar los usuarios
+    this.usuarioSeleccionado = "-- Seleccione un pastor --";
     this.servicioDatos.obtenerNombres().then((nombres) => {
-      this.usuarioSeleccionado = "-- Seleccione un pastor --";
       this.nombres = nombres;
     });;
 
@@ -90,7 +86,7 @@ export class InformesComponent {
   }
 
   descargarFacturasMes() {
-    this.servicioStorage.descargarCarpetaUsuario(this.pastorNombre,"12-10-2023");
+    this.servicioStorage.descargarCarpetaUsuario(this.pastorNombre, this.mesSeleccionado, this.anioSeleccionado);
   }
 
   generarPDF() {

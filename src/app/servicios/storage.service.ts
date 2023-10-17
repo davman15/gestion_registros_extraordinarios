@@ -3,6 +3,7 @@ import { AngularFireStorage } from '@angular/fire/compat/storage';
 import * as JSZip from 'jszip';
 import { forkJoin, from, switchMap } from 'rxjs';
 import { saveAs } from 'file-saver';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,9 @@ export class StorageService {
   constructor(private storage: AngularFireStorage) { }
 
   //Funciona falta pasarle los parametros y ya
-  async descargarCarpetaUsuario(usuario: string, fechaCarpeta: string) {
-    const rutaCarpeta = `usuarios/David Manrique/10-2023/`;
+  async descargarCarpetaUsuario(usuario: string, mes: number, anio: number) {
+    const rutaCarpeta = `usuarios/${usuario}/${mes}-${anio}/`;
+
     const zip = new JSZip();
     const descargarTodo: any = [];
 
@@ -34,14 +36,17 @@ export class StorageService {
             })
           );
         });
-    
         return forkJoin(descargaObservables);
       })
     ).subscribe({
       complete: async () => {
-        const blob = await zip.generateAsync({ type: "blob" });
-        saveAs(blob, 'facturasv2.zip');
+        if (descargarTodo.length > 0) {
+          const blob = await zip.generateAsync({ type: "blob" });
+          saveAs(blob, 'facturasv2.zip');
+        }
+        else
+          Swal.fire('Descarga Cancelada', 'Aún no hay facturas disponibles con este pastor este mes', 'error');
       }
-    });        
+    });
   }
 }

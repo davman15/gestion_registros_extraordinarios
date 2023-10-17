@@ -21,7 +21,6 @@
       <div class="form-floating my-4">
         <select class="form-select" aria-label="Seleccionar Año" (ngModelChange)="onSelectAnio($event)"
           [(ngModel)]="anioSeleccionado">
-          <option value="0">--Seleccione Año--</option>
           <option *ngFor="let anio of anios" [value]="anio">{{ anio }}</option>
         </select>
         <label for="anioSeleccionado">Año</label>
@@ -29,8 +28,8 @@
     </div>
     <div class="col-md-9 col-sm-9 col-xl-9">
       <h5 class="text-center mt-5" *ngIf="usuarioSeleccionado=='-- Seleccione un pastor --'">Seleccione un Pastor </h5>
-      <table class="table table-light border border-1 m-5"
-        *ngIf="eventosPorUsuario?.acumuladoMes && usuarioSeleccionado!='-- Seleccione un pastor --'" #tablaResumen>
+      <table class="table table-light border border-1 m-4 me-5"
+        *ngIf="eventosPorUsuario?.acumuladoMes && usuarioSeleccionado!='-- Seleccione un pastor --'">
         <thead>
           <tr>
             <th>Apellido Nombre</th>
@@ -102,12 +101,14 @@
       </table>
     </div>
   </div>
-  <div class="row" *ngIf="usuarioSeleccionado!='-- Seleccione un pastor --'">
-    <div class="col-12">
-      <button class="btn btn-danger me-3" (click)="generarPDF()">Generar PDF <i class="bi bi-file-pdf-fill"></i></button>
+  <div class="row">
+    <div class="col-12" *ngIf="usuarioSeleccionado!='-- Seleccione un pastor --'">
+      <button class="btn btn-danger me-2" [disabled]="usuarioSeleccionado=='-- Seleccione un pastor --'"
+        (click)="generarPDF()">Generar PDF <i class="bi bi-file-pdf-fill"></i></button>
+      <button class="btn btn-primary ms-2" [disabled]="usuarioSeleccionado=='-- Seleccione un pastor --'"
+        (click)="descargarFacturasMes()">Descargar Facturas del mes  <i class="bi bi-download"></i></button>
     </div>
-
   </div>
-  <button class="btn btn-danger ms-3" (click)="descargarFacturasMes()">Descargar Facturas del mes <i class="bi bi-file-pdf-fill"></i></button>
+
 
 </div>
